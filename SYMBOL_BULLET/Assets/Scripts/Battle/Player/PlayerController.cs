@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// プレイヤーの移動方法と範囲制限を担当
+/// プレイヤーの移動方法と範囲制限担当
 /// WASD or 矢印で移動可能 斜め移動を速度が変わらないように
 /// </summary> 
 
@@ -41,9 +41,7 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(next);
     }
 
-    /// <summary>
-    /// WASD or 矢印キーから移動ベクトル作成
-    /// </summary> 
+    /// <summary> WASD or 矢印キーから移動ベクトル作成</summary> 
     private Vector2 ReadMoveInput()
     {
         Keyboard kb = Keyboard.current;
