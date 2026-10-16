@@ -92,8 +92,19 @@ public class Projectile : MonoBehaviour
                 boss.TakeDamage(damage);
                 Destroy(gameObject);
             }
+            return;
         }
 
-        //Boss‚Ì’e‚ªPlayer‚É–½’†‚Ìˆ—‚Í•Ê
+        //U’e¨ƒvƒŒƒCƒ„[
+        if (faction == Faction.Enemy && other.CompareTag("Player"))
+        {
+            PlayerHealth player = other.GetComponentInParent<PlayerHealth>();
+            if (player != null)
+            {
+                consumed = true;
+                player.TakeDamage(damage);//–³“G’†‚ÍPlayerHealth‘¤‚Å–³‹
+                Destroy (gameObject);
+            }
+        }
     }
 }
