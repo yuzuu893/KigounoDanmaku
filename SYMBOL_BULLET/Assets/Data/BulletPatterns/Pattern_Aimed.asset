@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: febaba56554527545816e156f3750b5f, type: 3}
   m_Name: Pattern_Aimed
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternData
-  type: 0
-  bulletPrefab: {fileID: 0}
-  fireInterval: 1
-  bulletSpeed: 4
+  type: 2
+  bulletPrefab: {fileID: 8591082356436110044, guid: 46168479bb85f4d42a063a66f14fc2f0, type: 3}
+  fireInterval: 0.6
+  bulletSpeed: 5
   damage: 1
-  bulletCount: 12
+  bulletCount: 1
   startAngle: 90
   fanSpread: 60
   fanAimAtPlayern: 0

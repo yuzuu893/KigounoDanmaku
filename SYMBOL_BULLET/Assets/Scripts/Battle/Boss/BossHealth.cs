@@ -49,9 +49,6 @@ public class BossHealth : MonoBehaviour
             IsDefeated = true;
             Debug.Log($"[BossHealth]{name}‚ðŒ‚”j‚µ‚Ü‚µ‚½");
             OnDefeated?.Invoke();
-
-            //‰¼•\Ž¦ Œ‚”j‚µ‚½‚ç”ñ•\Ž¦‚É
-            gameObject.SetActive(false);
         }
     }
 }
