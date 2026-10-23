@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -5,38 +6,48 @@ using UnityEngine;
 /// </summary>
 public class BulletPatternEmitter : MonoBehaviour
 {
-    [Header("弾幕設定")]
-    [Tooltip("実行する弾幕パターン")]
-    [SerializeField] private BulletPatternData pattern;
-
-    [Tooltip("戦闘開始から最初の発射までの待ち時間(秒)")]
-    [SerializeField] private float startDelay = 1f;
-
-    private float timer;
+    private readonly List<BulletPatternData> patterns = new List<BulletPatternData>();
+    private readonly List<float> timers = new List<float>();
     private Transform player;
-
-    private void OnDisable()
-    {
-        timer = startDelay;
-    }
 
     private void Start()
     {
         GameObject p = GameObject.FindWithTag("Player");
         if (p != null) player = p.transform;
-        else Debug.LogWarning("[BulletpatternEmitter] PlayerタグのObjectが見つかりません");
+        else Debug.LogWarning("[BulletPattenEmitter] Playerタグのオブジェクトが見つかりません");
+    }
+
+    ///<summary>
+    ///実行するパターンを入れ替える、以前のパターンとタイマーは廃棄
+    /// firstDerey秒ごとにパターンの入れ替え
+    /// </summary>
+    public void SetPatterns(IReadOnlyList<BulletPatternData> newPatterns, float firstDerey)
+    {
+        patterns.Clear();
+        timers.Clear();
+
+        if (newPatterns == null) return;
+        
+        foreach (BulletPatternData p in newPatterns)
+        {
+            if (p == null) continue;
+            patterns.Add(p);
+            timers.Add(firstDerey);
+        }
     }
 
     private void Update()
     {
-        if (pattern == null) return;
+        Vector2? target = player !=null ? (Vector2?)player.position : null;
 
-        timer -= Time.deltaTime;
-        if (timer <= 0f)
+        for (int i = 0; i < patterns.Count; i++) 
         {
-            Vector2? target = player != null ? (Vector2)player.position : null;
-            pattern.Fire(transform.position, target);
-            timer = pattern.FireInterval;
+            timers[i] -= Time.deltaTime;
+            if (timers[i] <= 0f)
+            {
+                patterns[i].Fire(transform.position, target);
+                timers[i] = patterns[i].FireInterval;
+            }
         }
     }
 }

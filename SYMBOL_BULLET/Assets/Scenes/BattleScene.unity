@@ -370,7 +370,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 1200, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &522974872
 MonoBehaviour:
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -609,8 +609,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d563ecebed9f603459d441eedb61fd41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPatternEmitter
-  pattern: {fileID: 11400000, guid: a5e4bb98904d8cb419283d6f362b2306, type: 2}
-  startDelay: 1
 --- !u!114 &1044469082 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2903762111777286676, guid: 3349a7c5f9734c647a98cb5545381310, type: 3}
@@ -622,6 +620,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd071426616d07044a7901e23db2c763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossHealth
+--- !u!114 &1044469086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044469075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3a05555f033d3d43ab184af1986980a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossController
+  phase2Threshold: 0.7
+  phase3Threshold: 0.35
+  initialDeley: 1
+  phaseChangeDeley: 1.5
+  phases:
+  - label: Phase1
+    patterns:
+    - {fileID: 11400000, guid: 26d4efbc7c0ef6948aef2407f63f2dc7, type: 2}
+  - label: Phase2
+    patterns:
+    - {fileID: 11400000, guid: 26d4efbc7c0ef6948aef2407f63f2dc7, type: 2}
+    - {fileID: 11400000, guid: 6fe6d40d5ecdebf41b8f5250c16afdd5, type: 2}
+  - label: Phase3
+    patterns:
+    - {fileID: 11400000, guid: a5e4bb98904d8cb419283d6f362b2306, type: 2}
+    - {fileID: 11400000, guid: 6fe6d40d5ecdebf41b8f5250c16afdd5, type: 2}
+    - {fileID: 11400000, guid: 26d4efbc7c0ef6948aef2407f63f2dc7, type: 2}
 --- !u!1 &1196972996
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,6 +661,7 @@ GameObject:
   - component: {fileID: 1196972999}
   - component: {fileID: 1196972998}
   - component: {fileID: 1196972997}
+  - component: {fileID: 1196973001}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -727,6 +755,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1196973001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196972996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 865d1dbfa2203354693bb65e476788d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleHUD
+  battle: {fileID: 1395535551}
+  boss: {fileID: 1044469082}
+  player: {fileID: 830170442}
+  bossHpSlider: {fileID: 1477995689}
+  playerHpText: {fileID: 1682456345}
+  timerText: {fileID: 1219661540}
+  resultText: {fileID: 522974872}
 --- !u!1 &1219661538
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +831,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -818,7 +865,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 4
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -864,6 +911,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219661538}
   m_CullTransparentMesh: 1
+--- !u!114 &1395535551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2398068907455485107, guid: 6677d2ca1734a1f4ba8cfa8fec85a3d3, type: 3}
+  m_PrefabInstance: {fileID: 8878221704466179061}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea7eca9f4141394281e2c92c369d2a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleManager
 --- !u!1 &1477995687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,7 +1061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1085,7 +1143,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1119,8 +1177,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -1306,6 +1364,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5115608457839513635, guid: 3349a7c5f9734c647a98cb5545381310, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1044469081}
+    - targetCorrespondingSourceObject: {fileID: 5115608457839513635, guid: 3349a7c5f9734c647a98cb5545381310, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1044469086}
   m_SourcePrefab: {fileID: 100100000, guid: 3349a7c5f9734c647a98cb5545381310, type: 3}
 --- !u!1001 &3388996565534494931
 PrefabInstance:
