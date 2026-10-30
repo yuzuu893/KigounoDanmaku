@@ -37,6 +37,13 @@ public class BossHealth : MonoBehaviour
         OnHealthChanged?.Invoke(currentHP, maxHP);
     }
 
+    /// <summary>最大HPを設定し、HPを全回復する(BossData適用用) </summary>
+    public void SetMaxHP(int value)
+    {
+        maxHP = Mathf.Max(1, value);
+        ResetHealth();
+    }
+
     public void TakeDamage(int amount)
     {
         if (IsDefeated || amount <= 0) return;

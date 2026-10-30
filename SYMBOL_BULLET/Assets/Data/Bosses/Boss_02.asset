@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852fc53c3a9922d48a22cc435fdbce4e, type: 3}
+  m_Name: Boss_02
+  m_EditorClassIdentifier: Assembly-CSharp::BossData
+  bossId: BOSS_01
+  displayName: Boss
+  symbol: "\u3007"
+  bossColor: {r: 1, g: 0, b: 0, a: 1}
+  maxHP: 300
+  phase2Threshold: 0.7
+  phase3Threshold: 0.35
+  initialDeley: 1
+  phaseChangeDeley: 1.5
+  phases:
+  - label: Phase
+    patterns: []
+  - label: Phase
+    patterns: []
+  - label: Phase
+    patterns: []

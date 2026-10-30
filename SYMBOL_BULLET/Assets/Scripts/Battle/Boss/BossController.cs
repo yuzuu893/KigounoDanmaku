@@ -21,30 +21,19 @@ public class BossPhase
 [RequireComponent(typeof(BulletPatternEmitter))]
 public class BossController : MonoBehaviour
 {
-    [Header("段階の切り替え条件(残りHP割合)")]
-    [Tooltip("この段階以下で第二形態移行")]
-    [Range(0f, 1f)]
-    [SerializeField] private float phase2Threshold = 0.7f;
-
-    [Tooltip("この段階以下で第三形態移行 第二形態の値より小さく")]
-    [Range(0f, 1f)]
-    [SerializeField] private float phase3Threshold = 0.35f;
-
-    [Header("待ち時間")]
-    [Tooltip("戦闘開始から最初の発射までの待ち時間")]
-    [SerializeField] private float initialDeley = 1f;
-
-    [Tooltip("段階が切り替わってから最初の発射までの待ち時間")]
-    [SerializeField] private float phaseChangeDeley = 1.5f;
-
-    [Header("各段階の弾幕(要素0=第一段階 1=第二 2=第三")]
-    [SerializeField] private BossPhase[] phases = new BossPhase[3];
+    [Header("ボス設定")]
+    [Tooltip("このボスの設定データ。")]
+    [SerializeField] private BossData data;
 
     private BossHealth health;
     private BulletPatternEmitter emitter;
+    private bool started;
 
     ///<summary>現在の段階(1～3)</summary>
     public int PhaseNumber { get; private set; }
+
+    /// <summary>適用中のBossData</summary>
+    public BossData Data => data;
 
     ///<summary>段階が切り替わった時</summary>
     public event Action<int> OnPhaseChanged;
@@ -53,11 +42,6 @@ public class BossController : MonoBehaviour
     {
         health = GetComponent<BossHealth>();
         emitter = GetComponent<BulletPatternEmitter>();
-
-        if(phase3Threshold >= phase2Threshold)
-        {
-            Debug.LogWarning("[BossController] Phase3ThresholdはPhase2Thresholdより小さくしてください", this);
-        }
     }
 
     private void OnEnable()
@@ -72,21 +56,40 @@ public class BossController : MonoBehaviour
 
     private void Start()
     {
-        ApplyPhase(1, initialDeley);
+        if (data == null)
+        {
+            Debug.LogError("[BossController] Dataが設定されてません", this);
+            return;
+        }
+
+        if (data.Phase3Threshold >= data.Phase2Threshold)
+        {
+            Debug.LogError("[BossController] Phase3ThresholdはPhase2Thresholdより小さくしてください", this);
+        }
+
+        //HPはAwake の実行順に邪魔されないよう,Startで適用
+        health.SetMaxHP(data.MaxHP);
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null) sr.color = data.BossColor;
+
+        started = true;
+        ApplyPhase(1, data.InitialDeley);
     }
 
     private void HandleHealthChanged(int current, int max)
     {
-        if (health.IsDefeated || max <= 0) return;
+        if (!started || health.IsDefeated ||max <= 0) return;
 
         float ratio = (float)current / max;
         int target = 1;
-        if (ratio <= phase3Threshold) target = 3;
-        else if (ratio <= phase2Threshold) target = 2;
+        if (ratio <= data.Phase3Threshold) target = 3;
+        else if (ratio <= data.Phase2Threshold) target = 2;
 
+        //後退しない：現在だけ進む場合のみ
         if (target > PhaseNumber)
         {
-            ApplyPhase(target, phaseChangeDeley);
+            ApplyPhase(target, data.PhaseChangeDeley);
         }
     }
 
@@ -94,12 +97,13 @@ public class BossController : MonoBehaviour
     {
         PhaseNumber = number;
 
+        BossPhase[] phases = data.Phases;
         int index = number - 1;
         BossPhase phase = (phases != null && index < phases.Length) ? phases[index] : null;
 
         if (phase == null || phase.patterns == null || phase.patterns.Count == 0)
         {
-            Debug.LogWarning($"[BossController] 第{number}段階の弾幕が設定されていません。", this);
+            Debug.LogError($"[BossController] {data.BossId}の第{number}段階の弾幕が設定されてません", this);
             emitter.SetPatterns(null, deley);
         }
         else
@@ -107,7 +111,7 @@ public class BossController : MonoBehaviour
             emitter.SetPatterns(phase.patterns, deley);
         }
 
-        Debug.Log($"[BossController] {name} 第{number}段階へ移行");
+        Debug.Log($"[BossController] {data.BossId} 第{number}形態へ移行");
         OnPhaseChanged?.Invoke(number);
     }
 }
